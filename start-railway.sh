@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
-# Railway port -> PasarGuard port
-export UVICORN_HOST="0.0.0.0"
-export UVICORN_PORT="${PORT:-8000}"
+# Railway / PasarGuard network settings. Keep an explicitly configured UVICORN_PORT.
+export UVICORN_HOST="${UVICORN_HOST:-0.0.0.0}"
+export UVICORN_PORT="${UVICORN_PORT:-${PORT:-8000}}"
 
 # Database / role defaults
 export SQLALCHEMY_DATABASE_URL="${SQLALCHEMY_DATABASE_URL:-sqlite+aiosqlite:///db.sqlite3}"
