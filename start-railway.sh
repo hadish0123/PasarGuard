@@ -1,18 +1,22 @@
 #!/usr/bin/env bash
 set -e
 
-# ریلوی پورت رو توی $PORT میده، پاسارگارد اسم UVICORN_PORT رو می‌خواد
+# Railway port -> PasarGuard port
 export UVICORN_HOST="0.0.0.0"
 export UVICORN_PORT="${PORT:-8000}"
 
-# اگه دیتابیس خارجی ست نشده بود، sqlite پیش‌فرض
+# Database / role defaults
 export SQLALCHEMY_DATABASE_URL="${SQLALCHEMY_DATABASE_URL:-sqlite+aiosqlite:///db.sqlite3}"
 export ROLE="${ROLE:-all-in-one}"
 
-# ریلوی پشت یه پروکسی HTTPS قرار داره، این تنظیمات کمک می‌کنه هدرهای
-# X-Forwarded-* درست تشخیص داده بشن (مثلاً تشخیص https)
+# PRIMEVPN browser subscription template
+export CUSTOM_TEMPLATES_DIRECTORY="/code/primevpn-templates"
+export SUBSCRIPTION_PAGE_TEMPLATE="subscription/index.html"
+
+# Railway proxy headers
 export UVICORN_PROXY_HEADERS="${UVICORN_PROXY_HEADERS:-true}"
 export UVICORN_FORWARDED_ALLOW_IPS="${UVICORN_FORWARDED_ALLOW_IPS:-*}"
 
-echo "Starting PasarGuard panel on port ${UVICORN_PORT}..."
+test -s /code/primevpn-templates/subscription/index.html
+echo "Starting PasarGuard panel with PRIMEVPN subscription template on port ${UVICORN_PORT}..."
 exec /code/start.sh
